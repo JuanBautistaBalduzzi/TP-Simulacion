@@ -14,12 +14,12 @@ public class EventoEvento extends Evento {
     private List<Double> tiempoComprometidoBici = new ArrayList<>();
 
     public EventoEvento( Map<String, Integer> variablesControl) {
-        super(0D, 8D, variablesControl, inicializarEstado(), inicializarFDPS());
+        super(0D, 360D, variablesControl, inicializarEstado(), inicializarFDPS());
     }
     private static Map<String, String> inicializarFDPS() {
         Map<String, String> fdps = new HashMap<>();
-        fdps.put("IA","8+R");
-        fdps.put("KM","6+R");
+        fdps.put("IA","-10*sqrt(-3R+4)+25");
+        fdps.put("KM","29*R+1");
         return fdps;
     }
     private static Map<String, Double> inicializarEstado(){
@@ -51,10 +51,14 @@ public class EventoEvento extends Evento {
             sumarEstado("PT",1D);
 
             Double distancia = getValueFromFdp("KM");
-            if(distancia <= 5 && tiempoComprometidoBici.size() == 0) {
+            if(distancia <= 5 && tiempoComprometidoBici.size() != 0) {
                 pedidoEnBici(distancia);
             }
-            else pedidoEnMoto(distancia);
+            if (tiempoComprometidoMotos.isEmpty()) {
+                sumarEstado("PP", 1D);
+            } else {
+                pedidoEnMoto(distancia);
+            }
 
         }
 
@@ -66,12 +70,12 @@ public class EventoEvento extends Evento {
         Double tiempoPreparacion = 20 + distancia * 3;
 
         if(minimoTCMoto + tiempoPreparacion - tiempo < 60 ) {
-            sumarEstado("CT",75D);
+            sumarEstado("CT",55D);
             actualizarTiempoComprometido(tiempoComprometidoMotos,minimoTCMoto,tiempoPreparacion);
             return;
         }
         if(Math.random() < 0.2) {
-            sumarEstado("CT",75D);
+            sumarEstado("CT",55D);
             actualizarTiempoComprometido(tiempoComprometidoMotos,minimoTCMoto,tiempoPreparacion);
         }
         else sumarEstado("PP",1D);
@@ -92,8 +96,9 @@ public class EventoEvento extends Evento {
         Double tiempoPreparacion = 20 + distancia * 3;
 
         if(minimoTCBici + tiempoPreparacion - tiempo < 60 ) {
-            sumarEstado("CT",50D);
+            sumarEstado("CT",25D);
             actualizarTiempoComprometido(tiempoComprometidoBici,minimoTCBici,tiempoPreparacion);
+            return;
         }
 
         Double minimoTCMoto = getMinMotos();
@@ -102,7 +107,7 @@ public class EventoEvento extends Evento {
             return;
         }
         if(Math.random() < 0.2) {
-            sumarEstado("CT",50D);
+            sumarEstado("CT",25D);
             actualizarTiempoComprometido(tiempoComprometidoBici,minimoTCBici,tiempoPreparacion);
         }
         else sumarEstado("PP",1D);
@@ -129,7 +134,7 @@ public class EventoEvento extends Evento {
     }
 
     private Double getMinBicis() {
-        return tiempoComprometidoMotos.stream().min(Double::compare).orElse(0D);
+        return tiempoComprometidoBici.stream().min(Double::compare).orElse(0D);
     }
 
 }

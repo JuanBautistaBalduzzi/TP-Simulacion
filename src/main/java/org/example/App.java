@@ -13,8 +13,9 @@ public class App
     {
         System.out.println( "Hello World!" );
         Map<String,Integer> control = new HashMap<>();
-        control.put("NM",2);
-        control.put("NB",1);
-        System.out.println(new DeltaT(control).resolveEvent().toString());
+        control.put("NM",10);
+        control.put("NB",8);
+        System.out.println("Variables de Control: " + control);
+        System.out.println("Resultado: " +new DeltaT(control).resolveEvent().toString());
     }
 }

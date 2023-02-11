@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class DeltaT extends Evento {
     public DeltaT( Map<String, Integer> variablesControl) {
-        super(0D,1D, variablesControl, inicializarEstado(), inicializarFDPS());
+        super(0D,365D*5, variablesControl, inicializarEstado(), inicializarFDPS());
     }
 
     protected Map<String, Double> resolveEvent() {
@@ -21,14 +21,25 @@ public class DeltaT extends Evento {
             variablesDeControlEE.put("TEMP", getValueFromFdp("TEMP" + estacion).intValue());
             Map<String, Double> flujoEntrada = new EventoEvento(variablesDeControlEE).resolveEvent(); // pasarle las variables de control
             actualizarEstado(flujoEntrada);
+            sumarEstado("CT",variablesControl.get("NM")*100D);
+            sumarEstado("CT",variablesControl.get("NB")*70D);
         }
         return construirResultados();
     }
     private static Map<String, String> inicializarFDPS() {
         Map<String, String> fdps = new HashMap<>();
-        fdps.put("TEMPVER","20+R");
-        fdps.put("LLUVVER","20+R");
-        fdps.put("AUVER","R");
+        fdps.put("TEMPVER","15*R + 20");
+        fdps.put("TEMPOTOÑ","15*R + 10");
+        fdps.put("TEMPINV","15*R");
+        fdps.put("TEMPPRIM","14*R + 18");
+        fdps.put("LLUVVER","(ln(-R+1)/-0.5686)-1");
+        fdps.put("LLUVINV","(ln(-R+1)/-0.6304)-1");
+        fdps.put("LLUVOTOÑ","(ln(-R+1)/-0.7073)-1");
+        fdps.put("LLUVPRIM","[ln(-R+1)/-0.6170]-1");
+        fdps.put("AUVER","2.38/((1/R-1)^(1/11))+11");
+        fdps.put("AUINV","3.74/((1/R-1)^(1/9.5))+9.5");
+        fdps.put("AUPRIM","3.44/((1/R-1)^(1/6))+6");
+        fdps.put("AUOTOÑ","4.47-1.72*ln(1/R-1)");
         return fdps;
     }
     private static Map<String, Double> inicializarEstado(){
@@ -43,9 +54,9 @@ public class DeltaT extends Evento {
     private Map<String,Double> construirResultados()
     {
         Map<String,Double> resultado = new HashMap<String, Double>();
-        resultado.put("CT",estado.get("CT"));
+        resultado.put("CTM",estado.get("CT")/(tiempoFinal/30));
         resultado.put("PPP",estado.get("PP")/estado.get("PT")*100);
-        resultado.put("TOM",estado.get("TO")/tiempoFinal/30);
+        resultado.put("TOMP",(estado.get("TO")/(tiempoFinal/30))/60/(repartidoresTotales()));
         return resultado;
     }
 
@@ -60,11 +71,14 @@ public class DeltaT extends Evento {
         return repartidoresDelDia;
 
     }
+    private Integer repartidoresTotales(){
+        return variablesControl.values().stream().mapToInt(x->x).sum();
+    }
 
     private Integer presentes(Integer repartidores, Double porcentajeAusencia) {
         Integer ausentes = 0;
         for (int i = 0; i<repartidores; i++) {
-            if(Math.random()< porcentajeAusencia){
+            if(Math.random()< porcentajeAusencia/100){
                 ausentes++;
             }
         }

@@ -15,8 +15,8 @@ public abstract class Evento {
     private Map<String,String> fdps;
 
     public Evento(Double tiempoInicial, Double tiempoFinal, Map<String, Integer> variablesControl, Map<String, Double> estado, Map<String, String> fdps) {
-        this.tiempoInicial = 0D;
-        this.tiempoFinal = 1D;
+        this.tiempoInicial = tiempoInicial;
+        this.tiempoFinal = tiempoFinal;
         this.variablesControl = variablesControl;
         this.estado = estado;
         this.fdps = fdps;
