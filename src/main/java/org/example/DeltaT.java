@@ -56,7 +56,7 @@ public class DeltaT extends Evento {
         Map<String,Double> resultado = new HashMap<String, Double>();
         resultado.put("CTM",estado.get("CT")/(tiempoFinal/30));
         resultado.put("PPP",estado.get("PP")/estado.get("PT")*100);
-        resultado.put("TOMP",(estado.get("TO")/(tiempoFinal/30))/60/(repartidoresTotales()));
+        resultado.put("TOMP",((estado.get("TO")/60)/(tiempoFinal*6/30)));
         return resultado;
     }
 

@@ -13,8 +13,8 @@ public class App
     {
         System.out.println( "Hello World!" );
         Map<String,Integer> control = new HashMap<>();
-        control.put("NM",10);
-        control.put("NB",8);
+        control.put("NM",5);
+        control.put("NB",4);
         System.out.println("Variables de Control: " + control);
         System.out.println("Resultado: " +new DeltaT(control).resolveEvent().toString());
     }
