@@ -14,6 +14,10 @@ on:
   pull_request:
     branches: [ "main" ]
     types: [opened, edited]
+env:
+  jdk: '17'
+  sonarAnalisys: true
+  isNebulaRelease: false
 
 jobs:
   build:
@@ -34,6 +38,11 @@ jobs:
       run: mvn test --file pom.xml
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+      
+    - name: Sonar Analisis
+      if: ${{ env.sonarAnalisys == 'true'}}
+      run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.host.url=${{ secrets.SONAR_HOST }} -Dsonar.projectKey=despegar/${{ github.event.repository.name }} -Dsonar.github.repository=despegar/${{ github.event.repository.name }} -Dsonar.github.pullRequest=${{ github.event.pull_request.ref }} -Dsonar.github.oauth=${{ secrets.GITHUB_TOKEN }} -Dsonar.pullrequest.key={{ github.event.pull_request.ref }} -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
+
   sonarqube:
     runs-on: [self-hosted, macOS, X64]
     steps:
@@ -46,5 +55,5 @@ jobs:
       env:
         SONAR_HOST_URL: http://localhost:9000/projects/
         SONAR_TOKEN: squ_08c9ccd490d5aee6837b5e3d326132ff36dd47c7
-    - name: Sonar Analisis
-      run: mvn sonar:sonar -Dsonar.github.repository=despegar/${{ github.event.repository.name }} -Dsonar.github.pullRequest=github.event.pull_request.ref -Dsonar.github.oauth
+    
+  
