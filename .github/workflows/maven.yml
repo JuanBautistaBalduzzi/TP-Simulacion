@@ -9,8 +9,6 @@
 name: Java CI with Maven
 
 on:
-  push:
-    branches: [ "RC**","HOTFIX**" ]
   workflow_dispatch:
     inputs:
       releaseVersion:
@@ -19,7 +17,9 @@ on:
       snapShotVersion:
         description: 'Next Snapshot Version'
         required: true
-
+  push:
+    branches: [ "RC**","HOTFIX**" ]
+  
 jobs:
   build:
     runs-on: ubuntu-latest
