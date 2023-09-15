@@ -41,7 +41,7 @@ jobs:
       run: echo "${{ toJSON(github) }}"
     - name: Sonar Analisis
       if: ${{ env.sonarAnalisys == 'true'}}
-      run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.host.url=${{ secrets.SONAR_HOST }} -Dsonar.projectKey=despegar/${{ github.event.repository.name }} -Dsonar.github.repository=despegar/${{ github.event.repository.name }} -Dsonar.github.pullRequest=${{ github.event.pull_request.ref }} -Dsonar.github.oauth=${{ secrets.GITHUB_TOKEN }} -Dsonar.pullrequest.key={{ github.event.number }} -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
+      run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.host.url=${{ secrets.SONAR_HOST }} -Dsonar.projectKey=despegar/${{ github.event.repository.name }} -Dsonar.github.repository=despegar/${{ github.event.repository.name }} -Dsonar.github.pullRequest=${{ github.event.pull_request.ref }} -Dsonar.github.oauth=${{ secrets.GITHUB_TOKEN }} -Dsonar.pullrequest.key=PR-${{ github.event.number }} -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
 
   sonarqube:
     runs-on: [self-hosted, macOS, X64]
