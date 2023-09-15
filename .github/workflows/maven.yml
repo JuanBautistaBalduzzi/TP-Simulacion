@@ -37,7 +37,8 @@ jobs:
       run: mvn test --file pom.xml
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-      
+    - name: perra
+      run: echo "${{github.event.pull_request}}"
     - name: Sonar Analisis
       if: ${{ env.sonarAnalisys == 'true'}}
       run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.host.url=${{ secrets.SONAR_HOST }} -Dsonar.projectKey=despegar/${{ github.event.repository.name }} -Dsonar.github.repository=despegar/${{ github.event.repository.name }} -Dsonar.github.pullRequest=${{ github.event.pull_request.ref }} -Dsonar.github.oauth=${{ secrets.GITHUB_TOKEN }} -Dsonar.pullrequest.key={{ github.event.number }} -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
