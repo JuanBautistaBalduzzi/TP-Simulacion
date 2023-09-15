@@ -12,8 +12,7 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
-    types: [opened, edited]
+    types: [opened, edited, synchronize, reopened]
 env:
   jdk: '17'
   sonarAnalisys: true
