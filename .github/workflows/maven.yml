@@ -17,9 +17,6 @@ on:
       snapShotVersion:
         description: 'Next Snapshot Version'
         required: true
-  push:
-    branches: [ "RC**","HOTFIX**" ]
-  
 jobs:
   build:
     runs-on: ubuntu-latest
