@@ -14,7 +14,7 @@ on:
       flutter_version:
         description: 'Framework version'
         required: true
-        default: '2.5.3'
+        default: $(git describe --tags --abbrev=0)
       publish_artifacts:
         description: 'Publish artifacts'
         required: true
