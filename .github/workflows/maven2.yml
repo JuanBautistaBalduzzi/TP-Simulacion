@@ -11,14 +11,14 @@ name: Java CI with Maven
 on:
  workflow_dispatch:
     inputs:
-      flutter_version:
-        description: 'Framework version'
+      releaseVersion:
+        description: 'Release version'
         required: true
-        default: $(git describe --tags --abbrev=0)
-      publish_artifacts:
-        description: 'Publish artifacts'
+        default: 'x.x.x'
+      snapshotVersion:
+        description: 'Next snapshot version'
         required: true
-        default: 'true'
+        default: 'x.x.x-SNAPSHOT'
 
 jobs:
   build:
